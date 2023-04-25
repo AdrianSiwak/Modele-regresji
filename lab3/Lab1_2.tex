@@ -1,0 +1,343 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  12pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage[OT4]{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Raport z Laboratoriów 3},
+  pdfauthor={Adrian Siwak, numer albumu 242084},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Raport z Laboratoriów 3}
+\author{Adrian Siwak, numer albumu 242084}
+\date{2023-03-22}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+W celu zbadania sprawności pewnej elektrowni wiatrowej wykonano 25
+pomiarów prędkości wiatru (zmienna v) i odpowiadającego jej napięcia
+prądu stałego, wytwarzanego przez tę elektrownię (zmienna DC).
+
+Wczytaj do pakietu dane z pliku `elektrownia.xlsx', zawierającego te
+pomiary.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(xtable)}
+\FunctionTok{library}\NormalTok{(openxlsx)}
+\NormalTok{dane}\OtherTok{\textless{}{-}}\FunctionTok{read.xlsx}\NormalTok{(}\StringTok{"elektrownia.xlsx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{section}{%
+\section{1}\label{section}}
+
+Wykonaj wykres rozproszenia dla próby (v1, DC1), . . . ,(v25, DC25) i
+oblicz współczynnik korelacji próbkowej. Czy zależność między zmiennymi
+v a DC ma charakter liniowy?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(dane)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Lab1_2_files/figure-latex/zad1-1} 
+
+}
+
+\caption{\label{fig:wykres_rozrzutu_zad1}Wykres rozproszenia ZADANIE 1}\label{fig:zad1}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{corr}\OtherTok{=}\FunctionTok{cor}\NormalTok{(dane}\SpecialCharTok{$}\NormalTok{v,dane}\SpecialCharTok{$}\NormalTok{DC)}
+\end{Highlighting}
+\end{Shaded}
+
+Wrtość współczynnika korelacji wynosi 0.935143430666912, więc wnioskować
+można o silnej korelacji,
+
+wykres nie ma jednak charakteru liniowego.
+
+\hypertarget{section-1}{%
+\section{2}\label{section-1}}
+
+W modelu regresji liniowej
+\(DC = \beta_{0} + \beta_{1} \cdot v + \mathcal{E}\) opisującym
+zależność między zmienną objaśnianą \(DC\) i zmienną objaśniającą \(v\),
+wyznacz estymatory najmniejszych kwadratów \(\hat{\beta_{0}}\) i
+\(\hat{\beta_{1}}\) parametrów \(\beta_{0}\) i \(\beta_{1}\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DC}\OtherTok{\textless{}{-}}\NormalTok{dane}\SpecialCharTok{$}\NormalTok{DC}
+\NormalTok{v}\OtherTok{\textless{}{-}}\NormalTok{dane}\SpecialCharTok{$}\NormalTok{v}
+\NormalTok{model}\OtherTok{\textless{}{-}}\FunctionTok{lm}\NormalTok{(DC}\SpecialCharTok{\textasciitilde{}}\NormalTok{v)}
+\NormalTok{b\_0}\OtherTok{=}\NormalTok{model}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{]}
+\NormalTok{b\_1}\OtherTok{=}\NormalTok{model}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Estymatory najmniejszych kwadratów \(\hat{\beta_{0}}\) i
+\(\hat{\beta_{1}}\) mają wartości: \(\hat{\beta_{0}}\) =
+0.130875130898235 \(\hat{\beta_{1}}\) = 0.24114886971653
+
+\hypertarget{section-2}{%
+\section{3}\label{section-2}}
+
+Wyznacz \(R^{2}\), \(\hat{\sigma^{2}}\) oraz p-wartość dla testu
+\(H_{0} : \beta_{1} = 0\) vs \(H_{1} : \beta_{1} \neq 0\); Czy na
+poziomie istotaności \(\alpha = 0,05\) należy odrzucić \(H_{0}\)?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{summary}\OtherTok{=}\FunctionTok{summary}\NormalTok{(model)}
+
+\NormalTok{sigma\_squared\_hat}\OtherTok{=}\NormalTok{(summary}\SpecialCharTok{$}\NormalTok{sigma)}\SpecialCharTok{**}\DecValTok{2}
+
+\NormalTok{R\_2}\OtherTok{=}\NormalTok{summary}\SpecialCharTok{$}\NormalTok{r.squared}
+
+\NormalTok{T\_stat}\OtherTok{=}\FunctionTok{summary}\NormalTok{(model)}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{]}
+\NormalTok{t}\OtherTok{=}\FunctionTok{qt}\NormalTok{(}\FloatTok{0.975}\NormalTok{,}\DecValTok{23}\NormalTok{)}
+\NormalTok{p\_value}\OtherTok{=}\FunctionTok{summary}\NormalTok{(model)}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+Wartość statystyki \(T\) wynosi 12.6592675639296. Hipoteza zerowa może
+być odrzucona na poziomie istotności \(\alpha = 0,05\) gdy wartość
+bezwzględna statystyki T jest większa niż \(t_{\alpha/2,n-2}\) - kwantyl
+rzędu \(1-\alpha/2\) rozkładu t-Studenta z n-2 stopniami swobody. W tym
+przypadku: \(n=25\), \(n-2=23\), \(1-\alpha/2 = 0,975\),
+\(t_{\alpha/2,n-2}\) = 2.06865761041905. 12.6592675639296 \textgreater{}
+2.06865761041905 więc hipotezę zerową możemy odrzucić na poziomie
+istotności \(\alpha = 0,05\). Ten test ma p-wartość równą
+7.54552540506968e-12. Wartość \(R^{2}\) wynosi 0.874493235919481,
+natomiast \(\hat{\sigma^{2}}\) wynosi 0.0557205723172969.
+
+\hypertarget{section-3}{%
+\section{4}\label{section-3}}
+
+Po ponownym przeanalizowaniu wykresu rozproszenia dla zmiennych \(DC\) i
+\(v\) stwórz nową zmienną objaśniającą \(\hat{v}\), będącą jakąś funkcją
+zmiennej \(v\). Zmienną \(\hat{v}\) dobierz tak, by wykres rozproszenia
+dla zmiennych \(DC\) i \(\hat{v}\) był bardziej zbliżony do wykresu
+liniowego niż wykres rozproszenia dla zmiennych \(DC\) i \(v\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{v\_new}\OtherTok{\textless{}{-}}\NormalTok{v}\SpecialCharTok{**}\NormalTok{(.}\DecValTok{1}\NormalTok{)}
+\FunctionTok{plot}\NormalTok{(v\_new,DC)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{Lab1_2_files/figure-latex/zadanie_4-1} 
+
+}
+
+\caption{\label{fig:wykres_rozrzutu_zad4}Wykres rozproszenia ZADANIE 4}\label{fig:zadanie_4}
+\end{figure}
+
+\hypertarget{section-4}{%
+\section{5}\label{section-4}}
+
+W modelu regresji liniowej
+\(DC = \beta_{0} + \beta_{1} \cdot v + \mathcal{E}\) wyznacz estymatory
+najmniejszych kwadratów \(\hat{\beta_{0}}\) i \(\hat{\beta_{1}}\)
+parametrów \(\beta_{0}\) i \(\beta_{1}\). Jeśli współczynnik
+determinacji \(R^{2}\) w „nowym'' modelu jest większy od \(R^{2}\) w
+„starym'' modelu, to przejdź do następnego punktu. W przeciwnym razie
+wróć do poprzedniego punktu.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model2}\OtherTok{\textless{}{-}}\FunctionTok{lm}\NormalTok{(DC}\SpecialCharTok{\textasciitilde{}}\NormalTok{v\_new)}
+\NormalTok{b\_0\_2}\OtherTok{=}\NormalTok{model}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{]}
+\NormalTok{b\_1\_2}\OtherTok{=}\NormalTok{model}\SpecialCharTok{$}\NormalTok{coefficients[}\DecValTok{2}\NormalTok{]}
+
+\NormalTok{summary2}\OtherTok{=}\FunctionTok{summary}\NormalTok{(model2)}
+
+\NormalTok{R\_2\_2}\OtherTok{=}\NormalTok{summary2}\SpecialCharTok{$}\NormalTok{r.squared}
+\end{Highlighting}
+\end{Shaded}
+
+W nowym modelu wartość
+
+0.951441909174668 \textgreater{} 0.874493235919481
+
+\$\hat{\beta_{0}} =\$0.130875130898235
+
+\$\hat{\beta_{1}} =\$0.24114886971653
+
+\hypertarget{section-5}{%
+\section{6}\label{section-5}}
+
+Wskaż lepszy z modeli i uzasadnij swój wybór.
+
+Ponieważ wartość \(R^{2}\) jest większa w ``nowym'' modelu, a wykres
+rozrzutu jest bardziej liniowy, jest on modelem lepszym.
+
+\hypertarget{section-6}{%
+\section{7}\label{section-6}}
+
+Porównaj obserwowane i prognozowane przez oba modele wartości zmiennej
+DC.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Nr\_obserwacji}\OtherTok{\textless{}{-}}\DecValTok{1}\SpecialCharTok{:}\DecValTok{25}
+\NormalTok{obserwowane\_DC}\OtherTok{\textless{}{-}}\NormalTok{DC}
+\NormalTok{DC\_w\_starym\_modelu}\OtherTok{\textless{}{-}}\FunctionTok{predict}\NormalTok{(model)}
+\NormalTok{DC\_w\_nowym\_modelu}\OtherTok{\textless{}{-}}\FunctionTok{predict}\NormalTok{(model2)}
+\NormalTok{tabela}\OtherTok{\textless{}{-}}\FunctionTok{data.frame}\NormalTok{(Nr\_obserwacji,obserwowane\_DC,DC\_w\_starym\_modelu,DC\_w\_nowym\_modelu)}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{xtable}\NormalTok{(tabela), }\AttributeTok{type =} \StringTok{"latex"}\NormalTok{, }\AttributeTok{table.placement =} \StringTok{"H"}\NormalTok{, }\AttributeTok{comment=}\ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## \begin{table}[H]
+## \centering
+## \begin{tabular}{rrrrr}
+##   \hline
+##  & Nr\_obserwacji & obserwowane\_DC & DC\_w\_starym\_modelu & DC\_w\_nowym\_modelu \\ 
+##   \hline
+## 1 &   1 & 1.58 & 1.34 & 1.44 \\ 
+##   2 &   2 & 1.82 & 1.58 & 1.70 \\ 
+##   3 &   3 & 1.06 & 0.95 & 0.90 \\ 
+##   4 &   4 & 0.50 & 0.78 & 0.60 \\ 
+##   5 &   5 & 2.24 & 2.54 & 2.45 \\ 
+##   6 &   6 & 2.39 & 2.47 & 2.40 \\ 
+##   7 &   7 & 2.29 & 2.43 & 2.38 \\ 
+##   8 &   8 & 0.56 & 0.87 & 0.76 \\ 
+##   9 &   9 & 2.17 & 2.10 & 2.14 \\ 
+##   10 &  10 & 1.87 & 1.63 & 1.74 \\ 
+##   11 &  11 & 0.65 & 0.83 & 0.69 \\ 
+##   12 &  12 & 1.93 & 1.66 & 1.78 \\ 
+##   13 &  13 & 1.56 & 1.24 & 1.32 \\ 
+##   14 &  14 & 1.74 & 1.53 & 1.65 \\ 
+##   15 &  15 & 2.09 & 1.92 & 2.00 \\ 
+##   16 &  16 & 1.14 & 1.00 & 0.98 \\ 
+##   17 &  17 & 2.18 & 2.02 & 2.08 \\ 
+##   18 &  18 & 2.11 & 2.25 & 2.25 \\ 
+##   19 &  19 & 1.80 & 1.82 & 1.92 \\ 
+##   20 &  20 & 1.50 & 1.45 & 1.56 \\ 
+##   21 &  21 & 2.30 & 2.33 & 2.30 \\ 
+##   22 &  22 & 2.31 & 2.59 & 2.47 \\ 
+##   23 &  23 & 1.19 & 1.12 & 1.16 \\ 
+##   24 &  24 & 1.14 & 1.08 & 1.11 \\ 
+##   25 &  25 & 0.12 & 0.72 & 0.47 \\ 
+##    \hline
+## \end{tabular}
+## \end{table}
+\end{verbatim}
+
+\end{document}

@@ -1,0 +1,135 @@
+---
+title: "Raport z Laboratoriów 3"
+author: "Adrian Siwak, numer albumu 242084"
+date: "2023-03-22"
+header-includes:
+   - \usepackage[OT4]{polski}
+   - \usepackage[utf8]{inputenc}
+   - \usepackage{graphicx}
+   - \usepackage{float}
+output:   
+  pdf_document:
+    toc: true
+    fig_caption: yes
+    fig_width: 5 
+    fig_height: 4 
+    number_sections: false
+fontsize: 12pt 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+knitr::opts_chunk$set(fig.pos = "H", out.extra = "", fig.align = "center")
+```
+
+W celu zbadania sprawności pewnej elektrowni wiatrowej wykonano 25 pomiarów prędkości wiatru (zmienna v) i odpowiadającego jej napięcia prądu stałego, wytwarzanego przez tę elektrownię (zmienna DC).
+
+Wczytaj do pakietu dane z pliku 'elektrownia.xlsx', zawierającego te pomiary.
+
+```{r dane, echo=TRUE, eval=TRUE}
+library(xtable)
+library(openxlsx)
+dane<-read.xlsx("elektrownia.xlsx")
+
+```
+
+# 1
+
+Wykonaj wykres rozproszenia dla próby (v1, DC1), . . . ,(v25, DC25) i oblicz współczynnik korelacji próbkowej. Czy zależność między zmiennymi v a DC ma charakter liniowy?
+
+```{r zad1, echo=TRUE, eval=TRUE, fig.cap="\\label{fig:wykres_rozrzutu_zad1}Wykres rozproszenia ZADANIE 1"}
+plot(dane)
+corr=cor(dane$v,dane$DC)
+```
+
+Wrtość współczynnika korelacji wynosi `r toString(corr)`, więc wnioskować można o silnej korelacji,
+
+wykres nie ma jednak charakteru liniowego.
+
+# 2
+
+W modelu regresji liniowej $DC = \beta_{0} + \beta_{1} \cdot v + \mathcal{E}$ opisującym zależność między zmienną objaśnianą $DC$ i zmienną objaśniającą $v$, wyznacz estymatory najmniejszych kwadratów $\hat{\beta_{0}}$ i $\hat{\beta_{1}}$ parametrów $\beta_{0}$ i $\beta_{1}$.
+
+```{r zadanie_2, echo=TRUE, eval=TRUE,}
+DC<-dane$DC
+v<-dane$v
+model<-lm(DC~v)
+b_0=model$coefficients[1]
+b_1=model$coefficients[2]
+```
+
+Estymatory najmniejszych kwadratów $\hat{\beta_{0}}$ i $\hat{\beta_{1}}$ mają wartości: $\hat{\beta_{0}}$ = `r toString(b_0)` $\hat{\beta_{1}}$ = `r toString(b_1)`
+
+# 3
+
+Wyznacz $R^{2}$, $\hat{\sigma^{2}}$ oraz p-wartość dla testu $H_{0} : \beta_{1} = 0$ vs $H_{1} : \beta_{1} \neq 0$; Czy na poziomie istotaności $\alpha = 0,05$ należy odrzucić $H_{0}$?
+
+```{r zadanie_3, echo=TRUE, eval=TRUE}
+
+summary=summary(model)
+
+sigma_squared_hat=(summary$sigma)**2
+
+R_2=summary$r.squared
+
+T_stat=summary(model)$coefficients[2,3]
+t=qt(0.975,23)
+p_value=summary(model)$coefficients[2,4]
+
+```
+
+Wartość statystyki $T$ wynosi `r toString(T_stat)`. Hipoteza zerowa może być odrzucona na poziomie istotności $\alpha = 0,05$ gdy wartość bezwzględna statystyki T jest większa niż $t_{\alpha/2,n-2}$ - kwantyl rzędu $1-\alpha/2$ rozkładu t-Studenta z n-2 stopniami swobody. W tym przypadku: $n=25$, $n-2=23$, $1-\alpha/2 = 0,975$, $t_{\alpha/2,n-2}$ = `r toString(t)`. `r toString(T_stat)` \> `r toString(t)` więc hipotezę zerową możemy odrzucić na poziomie istotności $\alpha = 0,05$. Ten test ma p-wartość równą `r toString(p_value)`. Wartość $R^{2}$ wynosi `r toString(R_2)`, natomiast $\hat{\sigma^{2}}$ wynosi `r toString(sigma_squared_hat)`.
+
+# 4
+
+Po ponownym przeanalizowaniu wykresu rozproszenia dla zmiennych $DC$ i $v$ stwórz nową zmienną objaśniającą $\hat{v}$, będącą jakąś funkcją zmiennej $v$. Zmienną $\hat{v}$ dobierz tak, by wykres rozproszenia dla zmiennych $DC$ i $\hat{v}$ był bardziej zbliżony do wykresu liniowego niż wykres rozproszenia dla zmiennych $DC$ i $v$.
+
+```{r zadanie_4, echo=TRUE, eval=TRUE,fig.cap="\\label{fig:wykres_rozrzutu_zad4}Wykres rozproszenia ZADANIE 4"}
+v_new<-v**(.1)
+plot(v_new,DC)
+```
+
+# 5
+
+W modelu regresji liniowej $DC = \beta_{0} + \beta_{1} \cdot v + \mathcal{E}$ wyznacz estymatory najmniejszych kwadratów $\hat{\beta_{0}}$ i $\hat{\beta_{1}}$ parametrów $\beta_{0}$ i $\beta_{1}$. Jeśli współczynnik determinacji $R^{2}$ w „nowym" modelu jest większy od $R^{2}$ w „starym" modelu, to przejdź do następnego punktu. W przeciwnym razie wróć do poprzedniego punktu.
+
+```{r zadanie_5, echo=TRUE, eval=TRUE}
+
+model2<-lm(DC~v_new)
+b_0_2=model$coefficients[1]
+b_1_2=model$coefficients[2]
+
+summary2=summary(model2)
+
+R_2_2=summary2$r.squared
+
+```
+
+W nowym modelu wartość
+
+`r toString(R_2_2)` \> `r toString(R_2)`
+
+$\hat{\beta_{0}} =$`r toString(b_0_2)`
+
+$\hat{\beta_{1}} =$`r toString(b_1_2)`
+
+# 6
+
+Wskaż lepszy z modeli i uzasadnij swój wybór.
+
+Ponieważ wartość $R^{2}$ jest większa w "nowym" modelu, a wykres rozrzutu jest bardziej liniowy, jest on modelem lepszym.
+
+# 7
+
+Porównaj obserwowane i prognozowane przez oba modele wartości zmiennej DC.
+
+```{r zadanie_7, echo=TRUE, eval=TRUE,result='asis'}
+
+Nr_obserwacji<-1:25
+obserwowane_DC<-DC
+DC_w_starym_modelu<-predict(model)
+DC_w_nowym_modelu<-predict(model2)
+tabela<-data.frame(Nr_obserwacji,obserwowane_DC,DC_w_starym_modelu,DC_w_nowym_modelu)
+print(xtable(tabela), type = "latex", table.placement = "H", comment=FALSE)
+```

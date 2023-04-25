@@ -1,0 +1,381 @@
+---
+title: "Labolatorium 4"
+subtitle: "Modele Regresji liniowej i ich zastosowania"
+author: "Adrian Siwak,   album 242084"
+date: "2023-03-23"
+header-includes:
+   - \usepackage[OT4]{polski}
+   - \usepackage[utf8]{inputenc}
+   - \usepackage{graphicx}
+   - \usepackage{float}
+output: 
+  pdf_document:
+    toc: true
+    fig_caption: yes
+    fig_width: 5 
+    fig_height: 4 
+    number_sections: false
+fontsize: 12pt 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+knitr::opts_chunk$set(fig.pos = "H", out.extra = "", fig.align = "center")
+```
+
+```{r dane, echo=TRUE, eval=TRUE}
+library(xtable)
+library(openxlsx)
+library(corrplot)
+library(regclass)
+library(GGally)
+dane<-read.xlsx("regresja_wielokrotna.xlsx")
+
+```
+
+# 1
+
+Dla każdej z par utworzonych ze zmiennych $X1\cdots X10$ wykonaj wykres rozrzutu i po przeanalizowaniu tych rysunków odpowiedz na następujące pytania
+
+```{r zad1, echo=TRUE, eval=TRUE}
+
+
+ggpairs(dane)
+
+```
+
+## (a)
+
+Które ze zmiennych objaśniających mogą mieć najmocniejszy liniowy wpływ na zmienną objaśnianą $Y$?
+
+Wykres rozrzutu zmiennej objaśniającej $X_6$ i zmiennej objaśnianej $Y$ wskazuje na zależność liniową.
+
+## (b)
+
+Czy pojawia się problem współliniowości, to znaczy, czy istnieje choć jedna para silnie ze sobą skorelowanych zmiennych objaśniających?
+
+Tak, takie pary to $X_2$ i $X_8$ oraz $X_2$ i $X_{10}$ oraz $X_8$ i $X_{10}$.
+
+## (c)
+
+Czy pojawiają się obserwacje odstające?
+
+Tak, po wykresach rozrzutów można wnioskować że pojawiają się obserwacje odstające.
+
+# 2
+
+Wyznacz macierz korelacji próbkowych dla zmiennych $Y,X_1 \ldots X_{10}$ i po przeanalizowaniu tak otrzymanych współczynników ponownie odpowiedz na pytania (a) i (b) z poprzedniego zadania.
+
+```{r zad2, echo=TRUE, eval=TRUE}
+
+cor=cor(dane)
+corrplot(cor,method = "color")
+corrplot(cor,method = "number")
+
+```
+
+Ad (a) odpowiedź nie zmienia się. Ad (b) odpowiedź nie zmienia się.
+
+# 3
+
+Skonstruuj model regresji liniowej opisujący zależność między zmienną $Y$ a zmiennymi objaśniającymi
+
+```{r zadanie_3, echo=TRUE, eval=TRUE,}
+Y<-dane$Y
+model<-lm(Y~.,dane)
+
+```
+
+## (a)
+
+Wyznacz estymator najmniejszych kwadratów $\hat{\beta}$
+
+```{r zadanie_3a, echo=TRUE, eval=TRUE,}
+
+beta=model$coefficients
+print(beta)
+```
+
+## (b)
+
+Czy którakolwiek ze zmiennych objaśniających z tego (pełnego) modelu ma liniowy wpływ na zmienną objaśnianą? Odpowiedź uzasadnij podając p-wartość testu F.
+
+```{r zadanie_3b, echo=TRUE, eval=TRUE,}
+
+summary<-summary(model)
+p_value<- pf(summary$fstatistic[1],summary$fstatistic[2],summary$fstatistic[3],lower.tail=FALSE)
+```
+
+Ponieważ p-wartość testu F wynosi `r toString(p_value)` możemy wnioskować że któraś ze zmiennych objaśniających ma liniowy wpływ na zmienną objaśnianą $Y$.
+
+## (c)
+
+Wyznacz współczynniki determinacji $R^{2}$ i $Adj R^{2}$
+
+```{r zadanie_3c, echo=TRUE, eval=TRUE,}
+R_2<-summary$r.squared
+Adj_R_2<-summary$adj.r.squared
+```
+
+Współczynnik $R^{2}$ wynosi `r toString(R_2)` Współczynnik $Adj R^{2}$ wynosi `r toString(Adj_R_2)`
+
+# 4
+
+Rozwiąż problem współliniowości
+
+## (a)
+
+Spośród zmiennych objaśniających, dla których $VIF$ przekracza $10$ (lub równoważnie $TOL:= 1/VIF< 0,1$), wybierz tę z największą wartością $VIF$ i usuń ją z modelu.
+
+```{r zad_4_a, echo=FALSE, eval=TRUE, results='asis'}
+tabela<-data.frame(VIF(model))
+xtab<-xtable(tabela)
+
+print(xtab,title="VIF", type = "latex", table.placement = "H", comment=FALSE)
+
+dane2<-dane[-2]
+model2<-lm(Y~.,dane2)
+
+```
+
+Należy usunąć zmienną $X2$.
+
+## (b)
+
+Oblicz *wskaźniki podbicia wariancji* w modelu regresji zawierającym *pozostałe* zmienne objaśniające. Jeśli któryś z tych wskaźników jest większy od 10 wróć do poprzedniego punktu.
+
+```{r zadanie_4b, echo=TRUE, eval=TRUE, results='asis'}
+tabela2<-data.frame(VIF(model2))
+
+while(max(tabela2$VIF.model2.)>10){
+index<-which.max(tabela2$VIF.model2.)
+dane2<-dane2[-index]
+model2<-lm(Y~.,dane2)
+tabela2<-data.frame(VIF(model2))
+}
+xtab<-xtable(tabela2)
+
+print(xtab,title="VIF", type = "latex", table.placement = "H", comment=FALSE)
+
+```
+
+# 5
+
+Zidentyfikuj i ewentualnie usuń z próby obserwacje, które mogą być wpływowe. W tym celu przeanalizuj
+
+## (a)
+
+*wpływy (leverages)* kolejnych obserwacji, czyli liczby $h_{11}, . . . , h_{nn}$ tworzące główną przekątna macierzy $H$,
+
+```{r zadanie_5_a, echo=TRUE, eval=TRUE,}
+levreges<-lm.influence(model2)$hat
+p<-7
+n<-200
+levreges.indexes<-which(levreges>(3*p)/n)
+```
+
+Indeksy obserwacji odstających to `r toString(unname(levreges.indexes))`
+
+## (b)
+
+*odległości Cooke\`a* $D_{1},\ldots D_{n}$
+
+```{r zadanie_5_b, echo=TRUE, eval=TRUE,}
+cook<-cooks.distance(model2)
+cook.indexes<-which(cook>4/(n-p))
+```
+
+Indeksy obserwacji odstających to `r toString(unname(cook.indexes))`
+
+## (c)
+
+*standaryzowane rezydua* $r_{1} \ldots r_{n}$,
+
+```{r zadanie_5_c, echo=TRUE, eval=TRUE,}
+stand.res<-abs(rstandard(model2))
+stand.res.indexes<-which(stand.res>2)
+```
+
+Indeksy obserwacji odstających to `r toString(unname(stand.res.indexes))`
+
+## (d)
+
+$DFFITS_1,\ldots ,DFFITS_n$.
+
+```{r zadanie_5_d, echo=TRUE, eval=TRUE,}
+dffits<-dffits(model2)
+dffits.indexes<-which(dffits>2*sqrt((p+1)/(n-p-1)))
+```
+
+Indeksy obserwacji odstających to `r toString(unname(stand.res.indexes))`
+
+## wykres
+
+```{r zadanie_5, echo=TRUE, eval=TRUE,}
+plot(1:200,cook)
+abline(h=4/(n-p),col='red')
+```
+
+## usunięcie obserwacji
+
+```{r zadanie_5u, echo=TRUE, eval=TRUE,}
+dane2<-dane2[-100,]
+dane2<-dane2[-199,]#200 obserwacja po usunięciu obserwacji 100 ma indeks 199
+```
+
+# 6
+
+Wykorzystując zmienne i obserwacje, które nie zostały usunięte, ponownie zbuduj model regresji liniowej opisujący zależność między zmienną $Y$ a zmiennymi objaśniającymi.
+
+## (a)
+
+Wyznacz estymator najmniejszych kwadratów $\hat{\beta}$.
+
+```{r zadanie_6a, echo=TRUE, eval=TRUE}
+Y<-dane2$Y
+model2<-lm(Y~.,dane2)
+beta=model2$coefficients
+```
+
+$\hat{\beta}$ = `r toString(beta)`
+
+## (b)
+
+Czy którakolwiek ze zmiennych objaśniających z tego (pełnego) modelu ma liniowy wpływ na zmienną objaśnianą? Odpowiedź uzasadnij podając p-wartość testu $F$.
+
+```{r zadanie_6b, echo=TRUE, eval=TRUE}
+summary<-summary(model2)
+p_value<- pf(summary$fstatistic[1],summary$fstatistic[2],summary$fstatistic[3],lower.tail=FALSE)
+```
+
+p-wartość jest równa `r toString(p_value)`.
+
+Ponieważ p-wartość testu $F$ obliczana jest w liczbach zmiennoprzecinkowych, została zaokrąglona do zera, możemy zatem stwierdzić że któraś ze zmiennych objaśniających ma liniowy wpływ na zmienną objaśnianą.
+
+## (c)
+
+Wyznacz współczynniki determinacji $R^{2}$ i $Adj R^{2}$. Czy po usunięciu niektórych zmiennych lub obserwacji polepszyło się dopasowanie modelu do danych?
+
+```{r zadanie_6c, echo=TRUE, eval=TRUE}
+R_2.2<-summary$r.squared
+Adj_R_2.2<-summary$adj.r.squared
+```
+
+$R^{2}$ jest równa `r toString(R_2.2)` $>$ `r toString(R_2)` , $Adj R^{2}$ jest równa `r toString(Adj_R_2.2)` $>$ `r toString(Adj_R_2)`, dopasowanie modelu poprawiło się.
+
+# 7
+
+Wykorzystaj *regresję krokową*, opcje *forward* i *backward* (w pakiecie do wyboru podzbioru zmiennych objaśniających „najlepiej" opisującego liniowy wpływ zmiennych objaśniających na zmienną $Y$ . Wykorzystaj także inne opcje regresji krokowej, dostępne w używanym przez Ciebie pakiecie. Oczywiście, przy tej analizie użyj zmodyfikowanych danych, powstałych po usunięciu niektórych zmiennych i niektórych obserwacji.
+
+*Uwaga*: W ten sposób można otrzymać różne modele, więc do dalszej analizy *wybierz jeden z nich* (za pomocą współczynnika $C_p$ Mallowsa albo skorygowanego $R^2$) i nazwij go *modelem M*.
+
+```{r zadanie_7, echo=TRUE, eval=TRUE}
+backward <- step(model2, direction='backward', scope=formula(model2), trace=0)
+forward <- step(model2, direction='forward', scope=formula(model2), trace=0)
+summary_back<-summary(backward)
+summary_for<-summary(forward)
+Adj_R_2._back<-summary_back$adj.r.squared
+Adj_R_2._for<-summary_for$adj.r.squared
+```
+
+$Adj R^{2}$ w modelu *forward* wynosi `r toString(Adj_R_2._for)`. $Adj R^{2}$ w modelu *backward* wynosi `r toString(Adj_R_2._back)`. Modelem M zostaje model *backward*.
+
+## (a)
+
+Wyznacz estymator najmniejszych kwadratów $\hat{\beta}$ w modelu $M$.
+
+```{r zadanie_7_a, echo=TRUE, eval=TRUE}
+model_M<-backward
+beta_M=model_M$coefficients
+```
+
+$\hat{\beta}$ jest równy `r toString(beta_M)`.
+
+## (b)
+
+Czy którakolwiek ze zmiennych objaśniających z *modelu M* ma liniowy wpływ na zmienną objaśnianą? Odpowiedź uzasadnij podając p-value (p-wartość) odpowiedniego testu.
+
+```{r zadanie_7_b, echo=TRUE, eval=TRUE}
+summary_M<-summary(model_M)
+p_value_M<- pf(summary_M$fstatistic[1],summary_M$fstatistic[2],summary_M$fstatistic[3],lower.tail=FALSE)
+```
+
+p-wartość testu $F$ wynosi `r toString(p_value_M)` , (została zaokrąglona przy obliczeniach na liczbach zmiennoprzecinkowych), więc można wnioskować że któraś zmienna objaśniająca ma liniowy wpływ na zmienną objaśnianą.
+
+## (c)
+
+Dla każdej ze zmiennych objaśniających, które znalazły się w *modelu M*, sprawdź, czy ma ona liniowy wpływ na zmienną objaśnianą, gdy w modelu uwzględnione zostały pozostałe zmienne. Podaj p-wartość odpowiedniego testu i sformułuj wniosek.
+
+```{r zadanie_7_c, echo=TRUE, eval=TRUE}
+print(anova(model_M))
+```
+
+Można wnioskować że każda ze zmiennych objaśniających w *modelu M* ma liniowy wpływ na zmienną objaśnianą, ponieważ wartości $F$ testów -kolumna Pr(\>F)- są mniejsze od 0.05.
+
+## (d)
+
+Wyznacz przedział ufności na poziomie ufności 0.95 dla współczynników regresji, odpowiadających zmiennym z *modelu M*.
+
+```{r zadanie_7_d, echo=TRUE, eval=TRUE, results='asis'}
+con<-confint(model_M)
+xtable(con)
+```
+
+## (e)
+
+Wyznacz współczynniki determinacji $R^{2}$ i $Adj R^{2}$ w *modelu M*.
+
+```{r zadanie_7e, echo=TRUE, eval=TRUE, results='asis'}
+R_2_m<-summary_M$r.squared
+Adj_R_2_m<-summary_M$adj.r.squared
+```
+
+$R^{2}$ w modelu *modelu M* wynosi `r toString(R_2_m)`. $Adj R^{2}$ w modelu *modelu M* wynosi `r toString(Adj_R_2_m)`.
+
+# 8
+
+Przeanalizuj zachowanie reszt w *modelu M*, by sprawdzić czy spełnione są założenia występujące w modelu regresji liniowej. W tym celu należy wykonaj
+
+## (a)
+
+wykresy kwantylowe dla reszt,
+
+```{r zadanie_8a, echo=TRUE, eval=TRUE,}
+qqnorm(model_M$residuals,main="Wykres kwantylowy rezyduów",col = 'blue')
+
+```
+
+## (b)
+
+wykresy reszt względem każdej ze zmiennych objaśniających,
+
+```{r zadanie_8b, echo=TRUE, eval=TRUE,}
+names<-names(dane2)
+counter<-0
+for (x in dane2[-8]){
+  counter<-counter+1
+plot(x,model_M$residuals,ylab="reszty",xlab=paste0("X",toString(counter)))}
+```
+
+## (c)
+
+wykresy reszt względem wartości przewidywanych przez model,
+
+```{r zadanie_8c, echo=TRUE, eval=TRUE,}
+y_hat=predict(model_M,newdata=dane2)
+plot(y_hat,model_M$residuals,ylab="reszty",xlab="wartości przewidywane")
+```
+
+Można wnioskować z wykresów że założenia modelu są spełnione.
+
+# 9
+
+Wyznacz przewidywaną przez *model M* wartość zmiennej objaśnianej $Y$, gdy zmienne objaśniające $X_1,X_2,\ldots ,X_{10}$ mają wartość $1,2,\ldots,10$.
+
+```{r zadanie_9, echo=TRUE, eval=TRUE,}
+y_hat2=predict(model_M,newdata=data.frame(X1=c(1),X3=c(3),X4=c(4),X5=c(5),X6=c(6),X7=c(7),X8=c(8)))
+
+```
+
+Przewidywana przez *model M* wartość to `r toString(y_hat2)`.
